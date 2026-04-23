@@ -18,12 +18,14 @@ public class NewBehaviourScript : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         Speed = 20;
+        Debug.Log("kaishi");
     }
 
     // Update is called once per frame
     void Update()
     {
         Player_Move();
+        Debug.Log(Xinput);
     }
 
 

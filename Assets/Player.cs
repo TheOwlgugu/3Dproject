@@ -11,6 +11,7 @@ public class NewBehaviourScript : MonoBehaviour
     [Header("MOVE")]
     private float Xinput;
     private float Zinput;
+    private float Yinput;
     public float Speed;
 
     // Start is called before the first frame update
@@ -24,6 +25,7 @@ public class NewBehaviourScript : MonoBehaviour
     void Update()
     {
         Player_Move();
+        Player_Move_upanddown();
     }
 
 
@@ -31,8 +33,26 @@ public class NewBehaviourScript : MonoBehaviour
     {
         Xinput = Input.GetAxis("Horizontal");
         Zinput = Input.GetAxis("Vertical");
-        rb.velocity = new Vector3(Xinput*Speed,rb.velocity.y, Zinput*Speed);
+        rb.velocity = new Vector3(Xinput*Speed,0, Zinput*Speed);
 
+    }
+
+
+    public void Player_Move_upanddown()
+    {
+        if(Input.GetKey(KeyCode.A))
+        {
+            Yinput = 1;
+        }
+        else if(Input .GetKey (KeyCode.Z))
+        {
+            Yinput = -1;
+        }
+        else
+        {
+            Yinput = 0;
+        }
+        rb.velocity = new Vector3(Xinput * Speed, Yinput * Speed, Zinput * Speed);
     }
 }
 

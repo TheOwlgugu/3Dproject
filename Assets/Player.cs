@@ -19,6 +19,7 @@ public class NewBehaviourScript : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         Speed = 20;
+        Debug.Log("kaishi");
     }
 
     // Update is called once per frame
@@ -26,6 +27,7 @@ public class NewBehaviourScript : MonoBehaviour
     {
         Player_Move();
         Player_Move_upanddown();
+        Debug.Log(Xinput);
     }
 
 

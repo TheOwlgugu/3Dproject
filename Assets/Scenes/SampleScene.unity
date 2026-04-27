@@ -439,6 +439,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1459483221}
   - component: {fileID: 1459483226}
+  - component: {fileID: 1459483227}
   - component: {fileID: 1459483220}
   - component: {fileID: 1459483219}
   - component: {fileID: 1459483222}
@@ -577,9 +578,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
   player_camera: {fileID: 963194229}
-  Use_Controller: 1
+  Use_Controller: 0
   Use_Player: 0
   Speed: 0
+--- !u!114 &1459483227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1459483217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf9bc46d26c23c747b7ce8d8394b7b9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isRecording: 0
+  isPlayingBack: 0
+  isPaused: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

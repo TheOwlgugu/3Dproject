@@ -1,13 +1,13 @@
-基本操作方式：/n
-键盘：/n
-  方向键：控制Player前后左右移动/n
-  A/Z:控制Player上下移动/n
-  R:开始录制/结束录制/n
-  V:开始回放/结束回放/n
-  S:切换控制至Camera（Camera的移动同上）/n
-/n
-控制器：/n
-  左摇杆：控制Player前后左右移动/n
-  RT/LT:控制Player上下移动/n
-  Y:切换控制至Camera（Camera的移动同上）/n
-  右摇杆：控制Camera视角移动/n
+基本操作方式：
+键盘：
+  方向键：控制Player前后左右移动
+  A/Z:控制Player上下移动
+  R:开始录制/结束录制
+  V:开始回放/结束回放
+  S:切换控制至Camera（Camera的移动同上）
+
+控制器：
+  左摇杆：控制Player前后左右移动
+  RT/LT:控制Player上下移动
+  Y:切换控制至Camera（Camera的移动同上）
+  右摇杆：控制Camera视角移动

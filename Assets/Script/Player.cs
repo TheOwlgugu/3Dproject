@@ -12,12 +12,14 @@ public class Player : MonoBehaviour
 
     [Header("MOVE")]
     public float Speed;
-    private float Xinput;
-    private float Zinput;
-    private float Yinput;
+    private float Xinput,Zinput,Yinput;    
+    private Vector3 HorizontalVelocity;// 用于存储水平方向的目标速度（不包含Y轴）
+    private Vector3 FinalVelocity; //最终速度  
 
-    // 用于存储水平方向的目标速度（不包含Y轴）
-    private Vector3 horizontalVelocity;
+    [Header("CAMERA")]
+    public Vector3 Camera_Right, Camera_Forward;
+
+    
 
     void Start()
     {
@@ -34,7 +36,8 @@ public class Player : MonoBehaviour
         if (Use_Player)
         {
             Player_Move();            // 计算水平速度
-            Player_Move_upanddown();  // 合并垂直速度并应用
+            Player_Move_upanddown();  // 合并垂直速度
+            FinalSpeed();
         }
     }
 
@@ -46,17 +49,16 @@ public class Player : MonoBehaviour
             Zinput = Input.GetAxis("Vertical");
 
             // 获取摄像机的右方向和前方向（忽略俯仰，只取水平）
-            Vector3 camRight = player_camera.transform.right;
-            Vector3 camForward = player_camera.transform.forward;
-            camRight.y = 0f;
-            camForward.y = 0f;
-            camRight.Normalize();
-            camForward.Normalize();
+            Camera_Right = player_camera.transform.right;
+            Camera_Forward = player_camera.transform.forward;
+            Camera_Right.y = 0f;
+            Camera_Forward.y = 0f;
+            Camera_Right.Normalize();
+            Camera_Forward.Normalize();
 
             // 计算移动方向并归一化（防止斜向更快）
-            Vector3 moveDir = (camRight * Xinput + camForward * Zinput).normalized;
-            horizontalVelocity = moveDir * Speed;
-        
+            Vector3 Move_Direction = (Camera_Right * Xinput + Camera_Forward * Zinput).normalized;
+            HorizontalVelocity = Move_Direction * Speed;
     }
 
     public void Player_Move_upanddown()
@@ -80,9 +82,14 @@ public class Player : MonoBehaviour
             Yinput = (Input.GetAxis("RT_AXIS") - Input.GetAxis("LT_AXIS"));
         }
 
+        
+    }
+
+    public void FinalSpeed()
+    {
         // 合并水平速度和垂直速度，一次性赋给 Rigidbody
-        Vector3 finalVelocity = new Vector3(horizontalVelocity.x, Yinput * Speed, horizontalVelocity.z);
-        rb.velocity = finalVelocity;
+        FinalVelocity = new Vector3(HorizontalVelocity.x, Yinput * Speed, HorizontalVelocity.z);
+        rb.velocity = FinalVelocity;
     }
 
     public void Use_Switch()
@@ -91,7 +98,7 @@ public class Player : MonoBehaviour
         {
             Use_Player = !Use_Player;
             rb.velocity = Vector3.zero;
-            horizontalVelocity = Vector3.zero;
+            HorizontalVelocity = Vector3.zero;
         }
     }
 }

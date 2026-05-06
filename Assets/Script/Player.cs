@@ -6,9 +6,10 @@ public class Player : MonoBehaviour
 {
     [Header("BASIC")]
     public Rigidbody rb;
-    public Camera_Script player_camera;
-    public bool Use_Controller;
-    public bool Use_Player;
+    public CameraScript PlayerCamera;
+    public bool UseController;
+    public bool UsePlayer;
+    private StateMachine stateMachine;
 
     [Header("MOVE")]
     public float Speed;
@@ -17,23 +18,23 @@ public class Player : MonoBehaviour
     private Vector3 FinalVelocity; //最终速度  
 
     [Header("CAMERA")]
-    public Vector3 Camera_Right, Camera_Forward;
+    public Vector3 CameraRight, CameraForward;
 
     
 
     void Start()
     {
+        stateMachine = GetComponent<StateMachine>();
         rb = GetComponent<Rigidbody>();
         Speed = 20;
-        Use_Controller = true;
-        Use_Player = true;
+        UseController = true;
+        UsePlayer = true;
 
     }
 
     void Update()
     {
-        Use_Switch();
-        if (Use_Player)
+        if (stateMachine.state == StateMachine.MainState.player)
         {
             Player_Move();            // 计算水平速度
             Player_Move_upanddown();  // 合并垂直速度
@@ -49,15 +50,15 @@ public class Player : MonoBehaviour
             Zinput = Input.GetAxis("Vertical");
 
             // 获取摄像机的右方向和前方向（忽略俯仰，只取水平）
-            Camera_Right = player_camera.transform.right;
-            Camera_Forward = player_camera.transform.forward;
-            Camera_Right.y = 0f;
-            Camera_Forward.y = 0f;
-            Camera_Right.Normalize();
-            Camera_Forward.Normalize();
+            CameraRight = PlayerCamera.transform.right;
+            CameraForward = PlayerCamera.transform.forward;
+            CameraRight.y = 0f;
+            CameraForward.y = 0f;
+            CameraRight.Normalize();
+            CameraForward.Normalize();
 
             // 计算移动方向并归一化（防止斜向更快）
-            Vector3 Move_Direction = (Camera_Right * Xinput + Camera_Forward * Zinput).normalized;
+            Vector3 Move_Direction = (CameraRight * Xinput + CameraForward * Zinput).normalized;
             HorizontalVelocity = Move_Direction * Speed;
     }
 
@@ -77,7 +78,7 @@ public class Player : MonoBehaviour
             Yinput = 0;
         }
 
-        if (Use_Controller)
+        if (UseController)
         {
             Yinput = (Input.GetAxis("RT_AXIS") - Input.GetAxis("LT_AXIS"));
         }
@@ -92,13 +93,5 @@ public class Player : MonoBehaviour
         rb.velocity = FinalVelocity;
     }
 
-    public void Use_Switch()
-    {
-        if (Input.GetButtonDown("Y_KEY") || Input.GetKeyDown(KeyCode.S))
-        {
-            Use_Player = !Use_Player;
-            rb.velocity = Vector3.zero;
-            HorizontalVelocity = Vector3.zero;
-        }
-    }
+    
 }

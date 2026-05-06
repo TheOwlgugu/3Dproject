@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 284641171}
   m_Layer: 0
   m_Name: platform
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -315,7 +315,7 @@ Transform:
   m_GameObject: {fileID: 705507993}
   serializedVersion: 2
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: -939, y: -205, z: -1106}
+  m_LocalPosition: {x: -746, y: 80, z: -1441}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -427,7 +427,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1459483226}
-  Camera_Speed: 0
+  stateMachine: {fileID: 1459483228}
+  CameraSpeed: 0
   LookSpeed: 2
 --- !u!1 &1459483217
 GameObject:
@@ -438,6 +439,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1459483221}
+  - component: {fileID: 1459483228}
   - component: {fileID: 1459483226}
   - component: {fileID: 1459483227}
   - component: {fileID: 1459483220}
@@ -446,7 +448,7 @@ GameObject:
   - component: {fileID: 1459483225}
   m_Layer: 0
   m_Name: player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -577,10 +579,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
-  player_camera: {fileID: 963194229}
-  Use_Controller: 0
-  Use_Player: 0
+  PlayerCamera: {fileID: 963194229}
+  UseController: 0
+  UsePlayer: 0
   Speed: 0
+  CameraRight: {x: 0, y: 0, z: 0}
+  CameraForward: {x: 0, y: 0, z: 0}
 --- !u!114 &1459483227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -596,6 +600,19 @@ MonoBehaviour:
   isRecording: 0
   isPlayingBack: 0
   isPaused: 0
+--- !u!114 &1459483228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1459483217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58e0388e7df51c449a63525097df55ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  state: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

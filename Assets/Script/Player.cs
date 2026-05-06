@@ -7,7 +7,6 @@ public class Player : MonoBehaviour
     [Header("BASIC")]
     public Rigidbody rb;
     public CameraScript PlayerCamera;
-    public bool UseController;
     public bool UsePlayer;
     private StateMachine stateMachine;
 
@@ -27,7 +26,6 @@ public class Player : MonoBehaviour
         stateMachine = GetComponent<StateMachine>();
         rb = GetComponent<Rigidbody>();
         Speed = 20;
-        UseController = true;
         UsePlayer = true;
 
     }
@@ -36,19 +34,27 @@ public class Player : MonoBehaviour
     {
         if (stateMachine.state == StateMachine.MainState.player)
         {
-            Player_Move();            // 计算水平速度
-            Player_Move_upanddown();  // 合并垂直速度
+            Player_Move(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));            // 计算水平速度
+            Player_Move_upanddown(
+                (Input.GetKey(KeyCode.A) || Input.GetButton("RB_KEY")),
+                (Input.GetKey(KeyCode.Z) || Input.GetButton("LB_KEY"))
+                );
+            FinalSpeed();
+        }
+
+        if(stateMachine.state == StateMachine.MainState.drone)
+        {
+            Player_Move(Input.GetAxis("RS_H"), -Input.GetAxis("RS_V"));            // 计算水平速度
+            Player_Move_upanddown((Input.GetAxis("Vertical") > 0) ,(Input.GetAxis("Vertical") < 0));
             FinalSpeed();
         }
     }
 
     // 水平移动（相对于摄像机的方向）
-    public void Player_Move()
-    {
-        
-            Xinput = Input.GetAxis("Horizontal");
-            Zinput = Input.GetAxis("Vertical");
-
+    public void Player_Move(float xinput,float zinput)
+    {  
+            Xinput = xinput;
+            Zinput = zinput;
             // 获取摄像机的右方向和前方向（忽略俯仰，只取水平）
             CameraRight = PlayerCamera.transform.right;
             CameraForward = PlayerCamera.transform.forward;
@@ -62,14 +68,14 @@ public class Player : MonoBehaviour
             HorizontalVelocity = Move_Direction * Speed;
     }
 
-    public void Player_Move_upanddown()
+    public void Player_Move_upanddown(bool up,bool down)
     {
-        // 上下输入（手柄扳机或键盘 A/Z）
-        if (Input.GetKey(KeyCode.A))
+        // 上下输入
+        if ( up )
         {
             Yinput = 1;
         }
-        else if (Input.GetKey(KeyCode.Z))
+        else if ( down )
         {
             Yinput = -1;
         }
@@ -77,12 +83,6 @@ public class Player : MonoBehaviour
         {
             Yinput = 0;
         }
-
-        if (UseController)
-        {
-            Yinput = (Input.GetAxis("RT_AXIS") - Input.GetAxis("LT_AXIS"));
-        }
-
         
     }
 

@@ -29,7 +29,13 @@ public class CameraScript : MonoBehaviour
             // 升降：独立处理（世界Y轴）
             CameraMove_upanddown();
             // 旋转：右摇杆控制
-            CameraRotate();
+            CameraRotate(Input.GetAxis("RS_H"), Input.GetAxis("RS_V"));
+        }
+
+        if(stateMachine.state == StateMachine.MainState.drone)
+        {
+            transform.position = player.transform.position;
+            CameraRotate(Input.GetAxis("Horizontal"), 0);
         }
     }
 
@@ -51,32 +57,28 @@ public class CameraScript : MonoBehaviour
     // 上下升降（世界Y轴，不受摄像机倾斜影响）
     private void CameraMove_upanddown()
     {
-        if (player.UseController)
+
+        // 键盘控制：A键上升，Z键下降（保留你原来的按键）
+        if (Input.GetKey(KeyCode.A) || Input.GetButton("RB_KEY"))
         {
-            yInput = (Input.GetAxis("RT_AXIS") - Input.GetAxis("LT_AXIS"));
+            yInput = 1;
+        }
+        else if (Input.GetKey(KeyCode.Z) || Input.GetButton("LB_KEY"))
+        {
+            yInput = -1;
         }
         else
         {
-            // 键盘控制：A键上升，Z键下降（保留你原来的按键）
-            if (Input.GetKey(KeyCode.A))
-                yInput = 1;
-            else if (Input.GetKey(KeyCode.Z))
-                yInput = -1;
-            else
-                yInput = 0;
+            yInput = 0;
         }
-
         // 只修改 Y 轴位置
         Vector3 upMove = Vector3.up * yInput * CameraSpeed * Time.deltaTime;
         transform.position += upMove;
     }
 
     // 右摇杆旋转视角
-    private void CameraRotate()
+    private void CameraRotate(float rightX, float rightY)
     {
-        float rightX = Input.GetAxis("RS_H");    // 右摇杆水平
-        float rightY = Input.GetAxis("RS_V");    // 右摇杆垂直
-
         cameraYaw += rightX * LookSpeed;
         cameraPitch += rightY * LookSpeed * 0.5f;   // 垂直灵敏度略低
 

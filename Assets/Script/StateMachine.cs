@@ -23,22 +23,36 @@ public class StateMachine : MonoBehaviour
         switch (state)
         {
             case MainState.player :
-                if (Input.GetKeyDown(KeyCode.C))
+                if (Input.GetKeyDown(KeyCode.C) || Input.GetButtonDown("Y_KEY"))
                 {
                     state = MainState.camera;
                     player.rb.velocity = Vector3.zero;
                     break;
                 }
+
+                if (Input.GetKeyDown(KeyCode.D) || Input.GetButtonDown("B_KEY"))
+                {
+                    state = MainState.drone;
+                    player.rb.velocity = Vector3.zero;
+                }
                 break;
 
             case MainState.camera :
-                if (Input.GetKeyDown(KeyCode.C))
+                if (Input.GetKeyDown(KeyCode.C) || Input.GetButtonDown("Y_KEY"))
                 {
                     state = MainState.player;
                     break;
                 }
                break;
 
+            case MainState.drone :
+                if (Input.GetKeyDown(KeyCode.D) || Input.GetButtonDown("B_KEY"))
+                {
+                    state = MainState.player;
+                    break;
+                }
+
+                break;
             
         }
 

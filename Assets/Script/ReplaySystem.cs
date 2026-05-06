@@ -45,14 +45,19 @@ public class ReplaySystem : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R)) Debug.Log("R键被按下了（无条件检测）");
         // 快捷键 R : 开始/停止录制
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R) || Input.GetButtonDown("X_KEY"))
         {
             if (!isPlayingBack && !isPaused)
             {
-                if (!isRecording) StartRecording();
-                else StopRecording();
+                if (!isRecording)
+                {
+                    StartRecording();
+                }
+                else
+                {
+                    StopRecording();
+                }
             }
         }
 

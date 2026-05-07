@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
     {
         stateMachine = GetComponent<StateMachine>();
         rb = GetComponent<Rigidbody>();
-        Speed = 20;
+        Speed = 30f;
         UsePlayer = true;
 
     }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class StateMachine : MonoBehaviour
@@ -9,16 +10,22 @@ public class StateMachine : MonoBehaviour
     [Header("BASIC")]
     public MainState state;
     private Player player;
+    private CameraScript maincamera;
+    public TextMeshProUGUI uiText;   // UI 文本（Canvas 下的）
+
 
     [Header("E_WALL")]
     public LayerMask eWallLayer;        // 在 Inspector 中勾选 e_Wall 层
     public float checkRadius = 3f;      // 检测半径
-    public bool isNearAirWall = false;    // 是否靠近空气墙
+    public bool UseEwall;           //是否检测电子围墙
+    private bool isNearAirWall = false;    // 是否靠近空气墙
 
     void Start()
     {
         state = MainState.player;
         player = GetComponent<Player>();
+        maincamera  = GameObject.FindWithTag("MainCamera").GetComponent<CameraScript>();
+        uiText = GameObject.FindWithTag("e_wall_UI").GetComponentInChildren<TextMeshProUGUI>();
     }
 
     // Update is called once per frame
@@ -32,6 +39,7 @@ public class StateMachine : MonoBehaviour
                 {
                     state = MainState.camera;
                     player.rb.velocity = Vector3.zero;
+                    Debug.Log("进入摄像机模式");
                     break;
                 }
 
@@ -39,6 +47,10 @@ public class StateMachine : MonoBehaviour
                 {
                     state = MainState.drone;
                     player.rb.velocity = Vector3.zero;
+                    maincamera.CameraSetXrotation();
+                    maincamera.CameraPositionSave();
+                    Debug.Log("进入无人机模式");
+                    break;
                 }
                 break;
 
@@ -46,6 +58,7 @@ public class StateMachine : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.C) || Input.GetButtonDown("Y_KEY"))
                 {
                     state = MainState.player;
+                    Debug.Log("进入默认模式");
                     break;
                 }
                break;
@@ -55,11 +68,11 @@ public class StateMachine : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.D) || Input.GetButtonDown("B_KEY"))
                 {
                     state = MainState.player;
+                    maincamera.CameraPositionLoading();//摄像机自动返回保存位置
+                    Debug.Log("进入默认模式");
                     break;
                 }
-
-                break;
-            
+                break;            
         }
 
     }
@@ -68,10 +81,15 @@ public class StateMachine : MonoBehaviour
     {
         // 每帧检测是否靠近空气墙
         isNearAirWall = CheckNearAirWall();
-        if (isNearAirWall)
+        if (isNearAirWall && UseEwall)
         {
+            uiText.enabled = true;
             // 靠近空气墙时的处理，例如减速、播放提示等
-            Debug.Log("靠近电子围墙了！");
+            //Debug.Log("靠近电子围墙了！");
+        }
+        else
+        {
+            uiText.enabled = false;
         }
     }
 

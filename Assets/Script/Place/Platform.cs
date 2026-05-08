@@ -7,7 +7,6 @@ public class Platform : MonoBehaviour
 {
     public GameObject nWall, eWall, wWall, sWall;
     private float WallHeight;
-    private float WallWight;
     private float wallhight;
     private float wallscaleX;
     private float wallscaleZ;
@@ -16,7 +15,6 @@ public class Platform : MonoBehaviour
     void Start()
     {
         WallHeight = 100f;
-        WallWight = 1.0f;
         wallhight = WallHeight * 0.5f;
         wallscaleX = transform.localScale.x;
         wallscaleZ = transform.localScale.z;

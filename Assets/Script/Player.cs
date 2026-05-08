@@ -16,8 +16,7 @@ public class Player : MonoBehaviour
     private Vector3 HorizontalVelocity;// 用于存储水平方向的目标速度（不包含Y轴）
     private Vector3 FinalVelocity; //最终速度  
 
-    [Header("CAMERA")]
-    public Vector3 CameraRight, CameraForward;
+    private Vector3 CameraRight, CameraForward;
 
     
 

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ground
   - e_wall
+  - e_wall_UI
   layers:
   - Default
   - TransparentFX

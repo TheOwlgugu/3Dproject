@@ -6,12 +6,24 @@ public class CameraScript : MonoBehaviour
 {
     [Header("BASIC")]
     public Player player;
-    [SerializeField]private StateMachine stateMachine;
+    public bool AutoSaving;
     public float CameraSpeed;
+    private StateMachine stateMachine;
     private float xInput, yInput, zInput;
-    private float cameraPitch = 0f;
-    private float cameraYaw = 0f;
     public float LookSpeed = 0.3f;  // 右摇杆旋转灵敏度
+    public LocationMessage LocationMes;
+
+    public struct LocationMessage
+    {
+        public Vector3 Position;
+        public Quaternion Rotation;
+
+        public LocationMessage(Vector3 position, Quaternion rotation)
+        {
+            this.Position = position;
+            this.Rotation = rotation;
+        }
+    }
 
     void Start()
     {
@@ -34,13 +46,14 @@ public class CameraScript : MonoBehaviour
 
         if(stateMachine.state == StateMachine.MainState.drone)
         {
+            
             transform.position = player.transform.position;
             CameraRotate(Input.GetAxis("Horizontal"), 0);
         }
     }
 
     // 水平移动（相对于摄像机当前朝向）
-    public void CameraMove()
+    private void CameraMove()
     {
         xInput = Input.GetAxis("Horizontal");
         zInput = Input.GetAxis("Vertical");
@@ -79,11 +92,49 @@ public class CameraScript : MonoBehaviour
     // 右摇杆旋转视角
     private void CameraRotate(float rightX, float rightY)
     {
-        cameraYaw += rightX * LookSpeed;
-        cameraPitch += rightY * LookSpeed * 0.5f;   // 垂直灵敏度略低
+        // 计算本次的旋转增量（度）
+        float yawDelta = rightX * LookSpeed;      // 水平偏航
+        float pitchDelta = rightY * LookSpeed * 0.5f; // 垂直俯仰
 
-        cameraPitch = Mathf.Clamp(cameraPitch, -80f, 80f);
+        // 应用旋转
+        transform.Rotate(0, yawDelta, 0, Space.World);        // 绕世界 Y 轴旋转
+        transform.Rotate(pitchDelta, 0, 0, Space.Self);      // 绕自身 X 轴旋转（注意正负号）
 
-        transform.rotation = Quaternion.Euler(cameraPitch, cameraYaw, 0);
+        // 限制俯仰角（防止翻转）
+        Vector3 angles = transform.eulerAngles;
+        // 将角度转换到 -180~180 范围，方便 clamping
+        float pitch = angles.x;
+        if (pitch > 180) pitch -= 360;
+        pitch = Mathf.Clamp(pitch, -80f, 80f);
+        angles.x = pitch;
+        transform.eulerAngles = angles;
+    }
+
+    public void CameraPositionSave()
+    {
+        if (AutoSaving)
+        {
+            LocationMes = new LocationMessage(transform.position, transform.rotation);
+            Debug.Log("相机位置信息已保存");
+        }
+    }
+
+    public void CameraPositionLoading()
+    {
+        if(AutoSaving)
+        {
+            Debug.Log("载入相机位置");
+            transform.position = LocationMes.Position;
+            transform.rotation = LocationMes.Rotation;
+        }
+    }
+
+    public void CameraSetXrotation()
+    {
+        Debug.Log("SetX=0");
+        // 获取当前欧拉角，但只修改 X 分量，然后重新生成四元数
+        Vector3 angles = transform.eulerAngles;
+        angles.x = 0;
+        transform.rotation = Quaternion.Euler(angles);
     }
 }

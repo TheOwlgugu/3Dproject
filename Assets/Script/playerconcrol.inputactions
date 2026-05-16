@@ -1,0 +1,46 @@
+{
+    "version": 1,
+    "name": "playerconcrol",
+    "maps": [
+        {
+            "name": "normal",
+            "id": "a22239ee-2660-4ffa-a974-85b220577972",
+            "actions": [
+                {
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "25069961-bbcd-4442-904e-3d41b43c2bbf",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "600ba90d-e666-4ccc-82fc-75c4d4f65c32",
+                    "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ab92159b-9e84-46ad-b30e-03b046c38d76",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

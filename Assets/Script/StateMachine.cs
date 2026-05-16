@@ -6,19 +6,15 @@ using UnityEngine;
 public class StateMachine : MonoBehaviour
 {
     // Start is called before the first frame update
-    public enum MainState { player, camera, waring, drone, replay }
+    public enum MainState { player, camera, warning, drone, replay }
     [Header("BASIC")]
     public MainState state;
     private Player player;
     private CameraScript maincamera;
     public TextMeshProUGUI uiText;   // UI 文本（Canvas 下的）
-
-
-    [Header("E_WALL")]
-    public LayerMask eWallLayer;        // 在 Inspector 中勾选 e_Wall 层
-    public float checkRadius = 3f;      // 检测半径
     public bool UseEwall;           //是否检测电子围墙
-    private bool isNearAirWall = false;    // 是否靠近空气墙
+
+
 
     void Start()
     {
@@ -72,7 +68,21 @@ public class StateMachine : MonoBehaviour
                     Debug.Log("进入默认模式");
                     break;
                 }
-                break;            
+                if (player.WarningSingnal())
+                {
+                    state = MainState.warning;
+                    player.rb.velocity = Vector3.zero;
+                    Debug.Log("警告！已停止飞行操作,按下回航键返回");
+                }
+                break;
+               case MainState.warning :
+                if (player.WarningDown)
+                {
+                    state = MainState.drone;
+                    player.WarningDown = false;
+                }
+
+                break;
         }
 
     }
@@ -80,31 +90,16 @@ public class StateMachine : MonoBehaviour
     public void EwallCheck()
     {
         // 每帧检测是否靠近空气墙
-        isNearAirWall = CheckNearAirWall();
+        bool isNearAirWall =player.CheckNearEWall();
         if (isNearAirWall && UseEwall)
         {
             uiText.enabled = true;
-            // 靠近空气墙时的处理，例如减速、播放提示等
             //Debug.Log("靠近电子围墙了！");
         }
         else
         {
             uiText.enabled = false;
         }
-    }
-
-    public bool CheckNearAirWall()
-    {
-        // 在玩家位置周围进行球形检测，只检测 airWallLayer 指定的层
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, checkRadius, eWallLayer);
-        return hitColliders.Length > 0;
-    }
-
-    // 可选：在 Scene 视图中可视化检测范围（调试用）
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, checkRadius);
     }
 
 }

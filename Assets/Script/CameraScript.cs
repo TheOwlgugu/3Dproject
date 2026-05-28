@@ -50,6 +50,12 @@ public class CameraScript : MonoBehaviour
             transform.position = player.transform.position;
             CameraRotate(Input.GetAxis("Horizontal"), 0);
         }
+
+        if(stateMachine.state == StateMachine.MainState.walk)
+        {
+            transform.position = player.transform.position;
+            CameraRotate(Input.GetAxis("RS_H"), 0);
+        }
     }
 
     // 水平移动（相对于摄像机当前朝向）

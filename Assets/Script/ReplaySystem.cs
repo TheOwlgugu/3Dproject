@@ -46,7 +46,7 @@ public class ReplaySystem : MonoBehaviour
     void Update()
     {
         // 快捷键 R : 开始/停止录制
-        if (Input.GetKeyDown(KeyCode.R) || Input.GetButtonDown("X_KEY"))
+        if (Input.GetKeyDown(KeyCode.R))
         {
             if (!isPlayingBack && !isPaused)
             {

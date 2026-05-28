@@ -6,12 +6,13 @@ using UnityEngine;
 public class StateMachine : MonoBehaviour
 {
     // Start is called before the first frame update
-    public enum MainState { player, camera, warning, drone, replay }
+    public enum MainState { player, camera, warning, drone, replay, walk }
     [Header("BASIC")]
     public MainState state;
     private Player player;
     private CameraScript maincamera;
     public TextMeshProUGUI uiText;   // UI 文本（Canvas 下的）
+    public Rigidbody rb;
     public bool UseEwall;           //是否检测电子围墙
 
 
@@ -19,6 +20,7 @@ public class StateMachine : MonoBehaviour
     void Start()
     {
         state = MainState.player;
+        rb = GetComponent<Rigidbody>();
         player = GetComponent<Player>();
         maincamera  = GameObject.FindWithTag("MainCamera").GetComponent<CameraScript>();
         uiText = GameObject.FindWithTag("e_wall_UI").GetComponentInChildren<TextMeshProUGUI>();
@@ -48,7 +50,21 @@ public class StateMachine : MonoBehaviour
                     Debug.Log("进入无人机模式");
                     break;
                 }
-                break;
+
+                if(Input.GetButtonDown("X_KEY")&&player.RoadCheck())
+                {
+                    state = MainState.walk;
+                    player.rb.velocity = Vector3.zero;
+                    rb.useGravity = true;
+                    break;
+
+                }
+                else if (Input.GetButtonDown("X_KEY"))
+                {
+                    Debug.Log("进入walk模式失败！");
+                    break;
+                }
+                    break;
 
             case MainState.camera :
                 if (Input.GetKeyDown(KeyCode.C) || Input.GetButtonDown("Y_KEY"))
@@ -75,12 +91,23 @@ public class StateMachine : MonoBehaviour
                     Debug.Log("警告！已停止飞行操作,按下回航键返回");
                 }
                 break;
-               case MainState.warning :
+             
+            case MainState.warning :
                 if (player.WarningDown)
                 {
                     state = MainState.drone;
                     player.WarningDown = false;
                 }
+
+                break;
+
+            case MainState.walk :
+                if (Input.GetButtonDown("X_KEY"))
+                {
+                    state = MainState.player;
+                    player.rb.velocity = Vector3.zero;
+                }
+
 
                 break;
         }

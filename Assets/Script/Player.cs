@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
     public LayerMask eWallLayer;        // 在 Inspector 中勾选 e_Wall 层
     private float checkRadius;      // 检测半径
     private float warningRadius;
+
     public struct EwallCheckMes
     {
         public float dis;
@@ -43,11 +44,16 @@ public class Player : MonoBehaviour
     private bool startAutoBack;
     public bool WarningDown;
 
+    [Header("WALK")]
+    private SphereCollider playerCollider;
+    public LayerMask RoadLayer;
+
 
     void Start()
     {
         stateMachine = GetComponent<StateMachine>();
         rb = GetComponent<Rigidbody>();
+        playerCollider = GetComponent<SphereCollider>();
         Speed = 30f;
         UsePlayer = true;
         checkRadius = 10f;
@@ -67,6 +73,7 @@ public class Player : MonoBehaviour
                 (Input.GetKey(KeyCode.Z) || Input.GetButton("LB_KEY"))
                 );
             FinalSpeed();
+           
         }
 
         if(stateMachine.state == StateMachine.MainState.drone)
@@ -77,10 +84,17 @@ public class Player : MonoBehaviour
             PrepareWarning();
         }
 
-        if(stateMachine.state == StateMachine.MainState.warning)
+        if (stateMachine.state == StateMachine.MainState.walk)
+        {
+            Player_Move(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            Yinput = -0.5f;
+            FinalSpeed();
+        }
+
+        if (stateMachine.state == StateMachine.MainState.warning)
         {
             DroneAutoBack();
-        }
+        }       
     }
 
     // 水平移动（相对于摄像机的方向）
@@ -177,6 +191,7 @@ public class Player : MonoBehaviour
         }
         if (startAutoBack && Physics.Raycast(transform.position, ewallCheckMes.dir, checkRadius, eWallLayer))
         {
+            PlayerCamera.transform.position = transform.position;//摄像机跟随
             rb.velocity = -ewallCheckMes.dir;
         }
         else if(startAutoBack)
@@ -185,6 +200,16 @@ public class Player : MonoBehaviour
             rb.velocity = Vector3.zero;
             startAutoBack = false;
         }
+    }
+
+    public bool RoadCheck()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, playerCollider.radius+0.1f, RoadLayer))
+        { 
+            return true;
+        }
+            return false;
     }
 
     // 可选：在 Scene 视图中可视化检测范围（调试用）

@@ -212,6 +212,8 @@ public class Player : MonoBehaviour
             return false;
     }
 
+ 
+
     // 可选：在 Scene 视图中可视化检测范围（调试用）
     private void OnDrawGizmosSelected()
     {

@@ -54,6 +54,9 @@ public class StateMachine : MonoBehaviour
                 if(Input.GetButtonDown("X_KEY")&&player.RoadCheck())
                 {
                     state = MainState.walk;
+                    maincamera.CameraSetXrotation();
+                    maincamera.CameraPositionSave();
+                    Debug.Log("进入WALK模式");
                     player.rb.velocity = Vector3.zero;
                     rb.useGravity = true;
                     break;
@@ -105,6 +108,8 @@ public class StateMachine : MonoBehaviour
                 if (Input.GetButtonDown("X_KEY"))
                 {
                     state = MainState.player;
+                    maincamera.CameraPositionLoading();//摄像机自动返回保存位置
+                    rb.useGravity = false;
                     player.rb.velocity = Vector3.zero;
                 }
 

@@ -87,6 +87,10 @@ public class Player : MonoBehaviour
         if (stateMachine.state == StateMachine.MainState.walk)
         {
             Player_Move(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            if(FrontRoadCheck(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")))
+            {
+                Debug.Log("1");
+            }
             Yinput = -0.5f;
             FinalSpeed();
         }
@@ -212,7 +216,21 @@ public class Player : MonoBehaviour
             return false;
     }
 
- 
+    public bool FrontRoadCheck(float xinput , float zinput)
+    {
+
+        Xinput = xinput;
+        Zinput = zinput;
+        Vector3 Move_Direction = (CameraRight * Xinput + CameraForward * Zinput).normalized;
+
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position - new Vector3(0,playerCollider.radius,0),
+            Move_Direction, out hit, playerCollider.radius + 0.1f, RoadLayer))
+        {
+            return true;
+        }
+        return false;
+    }
 
     // 可选：在 Scene 视图中可视化检测范围（调试用）
     private void OnDrawGizmosSelected()

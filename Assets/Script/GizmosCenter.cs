@@ -4,16 +4,38 @@ using UnityEngine;
 
 public class GizmosCenter: MonoBehaviour
 {
-    public float rayLength = 5f;
+    [Header("BASIC")]
+    public Player player;
+    public CameraScript CameraScript;
+    private SphereCollider playerCollider;
+
+    private void InitAll()
+    {
+        player = GetComponent<Player>();
+        CameraScript = GameObject.FindWithTag("MainCamera").GetComponent<CameraScript>();
+        playerCollider = GetComponent<SphereCollider>();
+    }
 
     private void OnDrawGizmos()
     {
-        // 从物体位置向前方绘制一条红色射线
-        Gizmos.color = Color.red;
-        Gizmos.DrawRay(transform.position, transform.forward * rayLength);
+        InitAll();
+        player_EwallCheck();
+        player_FrontCheck();
+    }
 
-        // 或者用 DrawLine（也可以绘制带起止点的线）
-        Vector3 endPoint = transform.position + transform.forward * rayLength;
-        Gizmos.DrawLine(transform.position, endPoint);
+    private void player_EwallCheck()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, player.CheckRadius);
+    }
+    
+    private void player_FrontCheck()
+    {
+        Vector3 CameraRight = CameraScript.transform.right;
+        Vector3 CameraForward = CameraScript.transform.forward;
+        Vector3 Move_Direction = (CameraRight * player.XInput + CameraForward * player.ZInput).normalized;
+        Move_Direction = (Move_Direction + Vector3.down * 0.5f).normalized; 
+        Gizmos.color = Color.blue;
+        Gizmos.DrawRay(transform.position , Move_Direction  * (playerCollider.radius + 0.1f));
     }
 }

@@ -17,7 +17,8 @@ public class Player : MonoBehaviour
     private float Xinput,Zinput,Yinput;    
     private Vector3 HorizontalVelocity;// 用于存储水平方向的目标速度（不包含Y轴）
     private Vector3 FinalVelocity; //最终速度  
-
+    public float XInput => Xinput;
+    public float ZInput => Zinput;
     private Vector3 CameraRight, CameraForward;
 
 
@@ -25,7 +26,7 @@ public class Player : MonoBehaviour
     public LayerMask eWallLayer;        // 在 Inspector 中勾选 e_Wall 层
     private float checkRadius;      // 检测半径
     private float warningRadius;
-
+    public float CheckRadius => checkRadius;
     public struct EwallCheckMes
     {
         public float dis;
@@ -54,6 +55,7 @@ public class Player : MonoBehaviour
         stateMachine = GetComponent<StateMachine>();
         rb = GetComponent<Rigidbody>();
         playerCollider = GetComponent<SphereCollider>();
+        PlayerCamera =GameObject.FindWithTag("MainCamera").GetComponent<CameraScript>();
         Speed = 30f;
         UsePlayer = true;
         checkRadius = 10f;
@@ -65,6 +67,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        
         if (stateMachine.state == StateMachine.MainState.player)
         {
             Player_Move(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));            // 计算水平速度
@@ -224,20 +227,15 @@ public class Player : MonoBehaviour
         Vector3 Move_Direction = (CameraRight * Xinput + CameraForward * Zinput).normalized;
 
         RaycastHit hit;
-        if (Physics.Raycast(transform.position - new Vector3(0,playerCollider.radius,0),
-            Move_Direction, out hit, playerCollider.radius + 0.1f, RoadLayer))
+        if (Physics.Raycast(transform.position ,
+            Move_Direction - new Vector3(0, playerCollider.radius, 0), 
+            out hit, playerCollider.radius + 0.1f, RoadLayer))
         {
             return true;
         }
         return false;
     }
 
-    // 可选：在 Scene 视图中可视化检测范围（调试用）
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, checkRadius);
-    }
 
 
 }

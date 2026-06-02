@@ -36,6 +36,6 @@ public class GizmosCenter: MonoBehaviour
         Vector3 Move_Direction = (CameraRight * player.XInput + CameraForward * player.ZInput).normalized;
         Move_Direction = (Move_Direction + Vector3.down * 0.5f).normalized; 
         Gizmos.color = Color.blue;
-        Gizmos.DrawRay(transform.position , Move_Direction  * (playerCollider.radius + 0.1f));
+        Gizmos.DrawRay(transform.position , Move_Direction  * (playerCollider.radius + 5f));
     }
 }

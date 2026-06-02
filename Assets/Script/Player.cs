@@ -89,13 +89,18 @@ public class Player : MonoBehaviour
 
         if (stateMachine.state == StateMachine.MainState.walk)
         {
-            Player_Move(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            
             if(FrontRoadCheck(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")))
             {
-                Debug.Log("1");
+                Player_Move(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+                Yinput = -0.5f;
+                FinalSpeed();
             }
-            Yinput = -0.5f;
-            FinalSpeed();
+            else
+            {
+                rb.velocity = Vector3.zero;
+            }
+                
         }
 
         if (stateMachine.state == StateMachine.MainState.warning)
@@ -228,8 +233,8 @@ public class Player : MonoBehaviour
 
         RaycastHit hit;
         if (Physics.Raycast(transform.position ,
-            Move_Direction - new Vector3(0, playerCollider.radius, 0), 
-            out hit, playerCollider.radius + 0.1f, RoadLayer))
+            Move_Direction + Vector3.down * 0.5f, 
+            out hit, playerCollider.radius + 5f, RoadLayer))
         {
             return true;
         }

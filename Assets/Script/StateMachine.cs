@@ -6,7 +6,7 @@ using UnityEngine;
 public class StateMachine : MonoBehaviour
 {
     // Start is called before the first frame update
-    public enum MainState { player, camera, warning, drone, replay, walk }
+    public enum MainState { player, camera, warning, drone, replay, walk, setting}
     [Header("BASIC")]
     public MainState state;
     private Player player;

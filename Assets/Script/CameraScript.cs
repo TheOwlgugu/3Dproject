@@ -27,16 +27,17 @@ public class CameraScript : MonoBehaviour
 
     void Start()
     {
-        CameraSpeed = 15.0f;
+        CameraSpeed = 15f;
         player = GameObject.FindWithTag("Player").GetComponent<Player>();
         stateMachine = GameObject.FindWithTag("Player").GetComponent<StateMachine>();
     }
 
     void Update()
     {
-        if(stateMachine.state == StateMachine.MainState.camera )
+        if (stateMachine.state == StateMachine.MainState.camera)
         {
             // 移动：水平方向跟随摄像机朝向
+            Accelerate();
             CameraMove();
             // 升降：独立处理（世界Y轴）
             CameraMove_upanddown();
@@ -44,14 +45,14 @@ public class CameraScript : MonoBehaviour
             CameraRotate(Input.GetAxis("RS_H"), Input.GetAxis("RS_V"));
         }
 
-        if(stateMachine.state == StateMachine.MainState.drone)
+        if (stateMachine.state == StateMachine.MainState.drone)
         {
-            
+
             transform.position = player.transform.position;
             CameraRotate(Input.GetAxis("Horizontal"), 0);
         }
 
-        if(stateMachine.state == StateMachine.MainState.walk)
+        if (stateMachine.state == StateMachine.MainState.walk)
         {
             transform.position = player.transform.position;
             CameraRotate(Input.GetAxis("RS_H"), 0);
@@ -127,7 +128,7 @@ public class CameraScript : MonoBehaviour
 
     public void CameraPositionLoading()
     {
-        if(AutoSaving)
+        if (AutoSaving)
         {
             Debug.Log("载入相机位置");
             transform.position = LocationMes.Position;
@@ -142,5 +143,18 @@ public class CameraScript : MonoBehaviour
         Vector3 angles = transform.eulerAngles;
         angles.x = 0;
         transform.rotation = Quaternion.Euler(angles);
+    }
+
+    private void Accelerate()
+    {
+        if ((Input.GetAxis("RT_AXIS") != 0))
+        {
+            if (CameraSpeed <= 400f)
+                CameraSpeed += Input.GetAxis("RT_AXIS");
+        }
+        else
+        {
+            CameraSpeed = 15f;
+        }
     }
 }

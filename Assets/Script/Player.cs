@@ -70,6 +70,7 @@ public class Player : MonoBehaviour
         
         if (stateMachine.state == StateMachine.MainState.player)
         {
+            Accelerate();
             Player_Move(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));            // 计算水平速度
             Player_Move_upanddown(
                 (Input.GetKey(KeyCode.A) || Input.GetButton("RB_KEY")),
@@ -89,8 +90,7 @@ public class Player : MonoBehaviour
 
         if (stateMachine.state == StateMachine.MainState.walk)
         {
-            
-            if(FrontRoadCheck(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")))
+            if (FrontRoadCheck(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")))
             {
                 Player_Move(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
                 Yinput = -0.5f;
@@ -144,6 +144,18 @@ public class Player : MonoBehaviour
         // 合并水平速度和垂直速度，一次性赋给 Rigidbody
         FinalVelocity = new Vector3(HorizontalVelocity.x, Yinput * Speed, HorizontalVelocity.z);
         rb.velocity = FinalVelocity;
+    }
+    private void Accelerate()
+    {
+        if ((Input.GetAxis("RT_AXIS") != 0))
+        {
+            if (Speed <= 400f)
+            Speed += Input.GetAxis("RT_AXIS");
+        }
+        else
+        {
+            Speed = 30f;
+        }
     }
 
     public bool CheckNearEWall()//用于检测无人机是否接近电子围墙

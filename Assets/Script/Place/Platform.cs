@@ -14,7 +14,7 @@ public class Platform : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        WallHeight = 100f;
+        WallHeight = 300f;
         wallhight = WallHeight * 0.5f;
         wallscaleX = transform.localScale.x;
         wallscaleZ = transform.localScale.z;

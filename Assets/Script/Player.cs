@@ -47,6 +47,7 @@ public class Player : MonoBehaviour
 
     [Header("WALK")]
     private SphereCollider playerCollider;
+    public float WalkHeight;
     public LayerMask RoadLayer;
 
 
@@ -60,6 +61,7 @@ public class Player : MonoBehaviour
         UsePlayer = true;
         checkRadius = 10f;
         warningRadius = 1.5f;
+        WalkHeight = 10f;
         ewallCheckMes = new EwallCheckMes();
         startAutoBack = false;
         WarningDown = false;
@@ -90,16 +92,9 @@ public class Player : MonoBehaviour
 
         if (stateMachine.state == StateMachine.MainState.walk)
         {
-            if (FrontRoadCheck(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")))
-            {
-                Player_Move(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-                Yinput = -0.5f;
-                FinalSpeed();
-            }
-            else
-            {
-                rb.velocity = Vector3.zero;
-            }
+            Player_Move(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            WallkType();
+            FinalSpeed();      
                 
         }
 
@@ -229,7 +224,7 @@ public class Player : MonoBehaviour
     public bool RoadCheck()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, playerCollider.radius+0.1f, RoadLayer))
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, playerCollider.radius+WalkHeight, RoadLayer))
         { 
             return true;
         }
@@ -245,14 +240,30 @@ public class Player : MonoBehaviour
 
         RaycastHit hit;
         if (Physics.Raycast(transform.position ,
-            Move_Direction + Vector3.down * 0.5f, 
-            out hit, playerCollider.radius + 5f, RoadLayer))
+            Move_Direction + Vector3.down * 2f, 
+            out hit, playerCollider.radius + (WalkHeight * 3), RoadLayer))
         {
             return true;
         }
         return false;
     }
 
-
+    private void WallkType()
+    {
+        RaycastHit hit;
+        Physics.Raycast(transform.position, Vector3.down, out hit, RoadLayer);
+        if(hit.distance >=  WalkHeight + 0.5f)
+        {
+            Yinput = -1f;
+        }
+        else if(hit.distance <= WalkHeight-0.5f)
+        {
+            Yinput = 1f;
+        }
+        else
+        {
+            Yinput = 0;
+        }
+    }
 
 }

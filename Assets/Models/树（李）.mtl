@@ -1,0 +1,42 @@
+# Blender 5.1.1 MTL File: '树（李）.blend'
+# www.blender.org
+
+newmtl Material
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd C:/Users/heyangshuai/Desktop/2026-06/一棵枝繁叶茂的阔叶大树树冠浓密呈圆形树干粗壮绿叶层层叠叠生机_爱给网_aigei_com/maps/AM001_Corona_030_bark_diffuse.jpg
+
+newmtl Material_#139
+Ns 200.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+map_Kd C:/Users/heyangshuai/Desktop/2026-06/一棵枝繁叶茂的阔叶大树树冠浓密呈圆形树干粗壮绿叶层层叠叠生机_爱给网_aigei_com/maps/AM001_Corona_030_leaf_diffuse.jpg
+
+newmtl Material_#140
+Ns 200.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+map_Kd C:/Users/heyangshuai/Desktop/2026-06/一棵枝繁叶茂的阔叶大树树冠浓密呈圆形树干粗壮绿叶层层叠叠生机_爱给网_aigei_com/maps/AM001_Corona_030_leaf_trans_1.jpg
+
+newmtl Material_#142
+Ns 200.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+map_Kd C:/Users/heyangshuai/Desktop/2026-06/一棵枝繁叶茂的阔叶大树树冠浓密呈圆形树干粗壮绿叶层层叠叠生机_爱给网_aigei_com/maps/AM001_Corona_030_leaf_trans.jpg

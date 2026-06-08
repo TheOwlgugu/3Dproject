@@ -57,7 +57,7 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         playerCollider = GetComponent<SphereCollider>();
         PlayerCamera =GameObject.FindWithTag("MainCamera").GetComponent<CameraScript>();
-        Speed = 30f;
+        Speed = 50f;
         UsePlayer = true;
         checkRadius = 10f;
         warningRadius = 1.5f;
@@ -92,10 +92,18 @@ public class Player : MonoBehaviour
 
         if (stateMachine.state == StateMachine.MainState.walk)
         {
-            Player_Move(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-            WallkType();
-            FinalSpeed();      
-                
+            if (FrontRoadCheck(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")))
+            {
+                Player_Move(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+                WallkType();
+                FinalSpeed();
+            }
+            else
+            {
+                rb.velocity = Vector3.zero;
+            }
+            
+
         }
 
         if (stateMachine.state == StateMachine.MainState.warning)
